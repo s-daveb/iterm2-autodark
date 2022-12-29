@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.7
+#!/usr/bin/env python3
 
 import asyncio
 import iterm2
@@ -8,8 +8,8 @@ import sys
 DURATION=300
 
 # Color presets to use
-LIGHT_PRESET_NAME="Light"
-DARK_PRESET_NAME="Dark"
+LIGHT_PRESET_NAME="MyEverForest (Light)"
+DARK_PRESET_NAME="MyEverForest (Dark)"
 
 # Profiles to update
 PROFILES=["Default"]
