@@ -5,14 +5,15 @@ import iterm2
 import sys
 
 # Duration between checks
-DURATION=300
+DURATION=30
 
 # Color presets to use
-LIGHT_PRESET_NAME="MyEverForest (Light)"
-DARK_PRESET_NAME="MyEverForest (Dark)"
+LIGHT_PRESET_NAME="Everforest_soft_light"
+DARK_PRESET_NAME="Everforest_hard_dark"
 
 # Profiles to update
-PROFILES=["Default"]
+PROFILE_EXCLUDE=[]
+TAG_EXCLUDE=["tmux"]
 
 async def dark_mode():
   command = 'defaults read -g AppleInterfaceStyle 2>/dev/null'
@@ -32,9 +33,15 @@ async def dark_mode():
 async def set_colors(connection, preset_name):
   print("[set_colors] Setting the {} preset...".format(preset_name.lower()))
   preset = await iterm2.ColorPreset.async_get(connection, preset_name)
-  for partial in (await iterm2.PartialProfile.async_get(connection)):
-    if partial.name in PROFILES:
-      await partial.async_set_color_preset(preset)
+  for profile in (await iterm2.PartialProfile.async_get(connection)):
+    should_skip = False
+    for tag in TAG_EXCLUDE:
+        if profile.name.contains(tag):
+            should_skip = True
+
+    if profile.name not in PROFILE_EXCLUDE and not should_skip:
+        await profile.async_set_color_preset(preset)
+        await asyncio.sleep(10)
 
 async def main(connection):
   while True:
